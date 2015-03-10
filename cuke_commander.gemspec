@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = CukeCommander::VERSION
   spec.authors       = ["Eric Kessler"]
   spec.email         = ["morrow748@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.description   = %q{Command Cucumber}
+  spec.summary       = %q{Provides an easy way to build a cucumber commandline.}
+  spec.homepage      = "https://github.com/grange-insurance/cuke_commander"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -20,4 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency 'cucumber'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'simplecov'
 end
