@@ -1,6 +1,6 @@
 # CukeCommander
 
-TODO: Write a gem description
+The cuke_commander gem provides an easy and programmatic way to build a command line for running Cucumber.
 
 ## Installation
 
@@ -18,7 +18,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'cuke_commander'
+
+    # Choose your Cucumber options
+    cucumber_options = {tags: ['@tag1', '@tag2'],
+                        formatters: {json: 'json_output.txt',
+                                     pretty: ''},
+                        options: ['-r features']}
+
+    # Use the generator to create an appropriate Cucumber command line
+    clg = CukeCommander::CLGenerator.new
+    command_line = clg.generate_command_line(cucumber_options)
+
+    puts command_line
+    # This will produce something along the lines of
+    # cucumber -t @tag1 -t @tag2 -f json -o json_output.txt -f pretty -r features
+
+    # Use the command line to kick off Cucumber
+    system(command_line)
+
+Simple!
+
+(see documentation for all implemented Cucumber options)
 
 ## Contributing
 
