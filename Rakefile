@@ -40,6 +40,6 @@ namespace 'cuke_commander' do
     Rake::Task['cuke_commander:features'].invoke(args[:command_options])
   end
 
-
-  task :default => :test_everything
 end
+
+task :default => 'cuke_commander:test_everything'
