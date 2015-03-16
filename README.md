@@ -21,7 +21,7 @@ Or install it yourself as:
     require 'cuke_commander'
 
     # Choose your Cucumber options
-    cucumber_options = {tags: ['@tag1', '@tag2'],
+    cucumber_options = {tags: ['@tag1', '@tag2,@tag3'],
                         formatters: {json: 'json_output.txt',
                                      pretty: ''},
                         options: ['-r features']}
@@ -32,7 +32,7 @@ Or install it yourself as:
 
     puts command_line
     # This will produce something along the lines of
-    # cucumber -t @tag1 -t @tag2 -f json -o json_output.txt -f pretty -r features
+    # cucumber -t @tag1 -t @tag2,@tag3 -f json -o json_output.txt -f pretty -r features
 
     # Use the command line to kick off Cucumber
     system(command_line)
