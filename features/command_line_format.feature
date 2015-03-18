@@ -16,30 +16,46 @@ Feature: Command line formatting
   Scenario: Profile format
     When  I ask for a cucumber command line with the following profiles
       | profile_1 |
-      | profile_2 |
     Then  I am given the following cucumber command line
-      | cucumber -p profile_1 -p profile_2 |
+      | cucumber -p profile_1 |
+    When  I ask for a cucumber command line with the following profiles
+      | profile_2 |
+      | profile_3 |
+    Then  I am given the following cucumber command line
+      | cucumber -p profile_2 -p profile_3 |
 
   Scenario: Tag format
     When  I ask for a cucumber command line with the following tags
       | @tag_1 |
-      | @tag_2 |
     Then  I am given the following cucumber command line
-      | cucumber -t @tag_1 -t @tag_2 |
+      | cucumber -t @tag_1 |
+    When  I ask for a cucumber command line with the following tags
+      | @tag_2       |
+      | @tag_3,@tag4 |
+    Then  I am given the following cucumber command line
+      | cucumber -t @tag_2 -t @tag_3,@tag4 |
 
   Scenario: File-path format
     When  I ask for a cucumber command line with the following file-paths
-      | features/common   |
-      | features/some_dir |
+      | features/common |
     Then  I am given the following cucumber command line
-      | cucumber features/common features/some_dir |
+      | cucumber features/common |
+    When  I ask for a cucumber command line with the following file-paths
+      | features/some_dir       |
+      | features/some_other_dir |
+    Then  I am given the following cucumber command line
+      | cucumber features/some_dir features/some_other_dir |
 
   Scenario: Exclude-file format
     When  I ask for a cucumber command line with the following exclude-files
       | features/test1 |
-      | features/test2 |
     Then  I am given the following cucumber command line
-      | cucumber -e features/test1 -e features/test2 |
+      | cucumber -e features/test1 |
+    When  I ask for a cucumber command line with the following exclude-files
+      | features/test2 |
+      | features/test3 |
+    Then  I am given the following cucumber command line
+      | cucumber -e features/test2 -e features/test3 |
 
   Scenario: No-source format
     When  I ask for a cucumber command line with a no-source flag
@@ -55,13 +71,27 @@ Feature: Command line formatting
     When  I ask for a cucumber command line with the following formatters
       | formatter | output_location |
       | json      | STDOUT          |
-      | pretty    |                 |
     Then  I am given the following cucumber command line
-      | cucumber -f json -o STDOUT -f pretty |
+      | cucumber -f json -o STDOUT |
+    When  I ask for a cucumber command line with the following formatters
+      | formatter | output_location |
+      | pretty    |                 |
+      | html      | output.html     |
+    Then  I am given the following cucumber command line
+      | cucumber -f pretty -f html -o output.html |
 
   Scenario: Additional options format
+
+  The additional options will be added to the end of the command line. This behavior allows for modifying
+  the generated command line due to Cucumber options that this gem has not implemented or to handle possible
+  extensions made to Cucumber by the user or, really, for any reason at all.
+
     When  I ask for a cucumber command line with the following additional options
       | --expand |
-      | -d       |
     Then  I am given the following cucumber command line
-      | cucumber --expand -d |
+      | cucumber --expand |
+    When  I ask for a cucumber command line with the following additional options
+      | -d        |
+      | fooBAR!!! |
+    Then  I am given the following cucumber command line
+      | cucumber -d fooBAR!!! |
