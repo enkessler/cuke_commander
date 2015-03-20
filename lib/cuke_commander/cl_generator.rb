@@ -94,91 +94,103 @@ module CukeCommander
     end
 
     def valid_profiles?(profiles)
-      profiles.nil? || profiles.is_a?(Array) || profiles.is_a?(String)
+      valid_string_array_value?(profiles)
     end
 
     def valid_tags?(tags)
-      tags.nil? || tags.is_a?(Array) || tags.is_a?(String)
+      valid_string_array_value?(tags)
     end
 
     def valid_file_paths?(file_paths)
-      file_paths.nil? || file_paths.is_a?(Array) || file_paths.is_a?(String)
+      valid_string_array_value?(file_paths)
     end
 
     def valid_formatters?(formatters)
-      formatters.nil? || formatters.is_a?(Hash)
+      valid_hash_value?(formatters)
     end
 
     def valid_excludes?(excludes)
-      excludes.nil? || excludes.is_a?(Array) || excludes.is_a?(String)
+      valid_string_array_value?(excludes)
     end
 
     def valid_no_source?(no_source)
-      no_source.nil? || (no_source == true) || (no_source == false)
+      valid_boolean_value?(no_source)
     end
 
     def valid_no_color?(no_color)
-      no_color.nil? || (no_color == true) || (no_color == false)
+      valid_boolean_value?(no_color)
     end
 
     def valid_color?(color)
-      color.nil? || (color == true) || (color == false)
+      valid_boolean_value?(color)
     end
 
     def valid_backtrace?(backtrace)
-      backtrace.nil? || (backtrace == true) || (backtrace == false)
+      valid_boolean_value?(backtrace)
     end
 
     def valid_wip?(wip)
-      wip.nil? || (wip == true) || (wip == false)
+      valid_boolean_value?(wip)
     end
 
     def valid_no_profile?(no_profile)
-      no_profile.nil? || (no_profile == true) || (no_profile == false)
+      valid_boolean_value?(no_profile)
     end
 
     def valid_expand?(expand)
-      expand.nil? || (expand == true) || (expand == false)
+      valid_boolean_value?(expand)
     end
 
     def valid_strict?(strict)
-      strict.nil? || (strict == true) || (strict == false)
+      valid_boolean_value?(strict)
     end
 
     def valid_verbose?(verbose)
-      verbose.nil? || (verbose == true) || (verbose == false)
+      valid_boolean_value?(verbose)
     end
 
     def valid_version?(version)
-      version.nil? || (version == true) || (version == false)
+      valid_boolean_value?(version)
     end
 
     def valid_quiet?(quiet)
-      quiet.nil? || (quiet == true) || (quiet == false)
+      valid_boolean_value?(quiet)
     end
 
     def valid_guess?(guess)
-      guess.nil? || (guess == true) || (guess == false)
+      valid_boolean_value?(guess)
     end
 
     def valid_help?(help)
-      help.nil? || (help == true) || (help == false)
+      valid_boolean_value?(help)
     end
 
     def valid_dry_run?(dry_run)
-      dry_run.nil? || (dry_run == true) || (dry_run == false)
+      valid_boolean_value?(dry_run)
     end
 
     def valid_names?(names)
-      names.nil? || names.is_a?(Array) || names.is_a?(String)
+      valid_string_array_value?(names)
     end
 
     def valid_requires?(requires)
-      requires.nil? || requires.is_a?(Array) || requires.is_a?(String)
+      valid_string_array_value?(requires)
     end
 
     def valid_options?(options)
-      options.nil? || options.is_a?(Array) || options.is_a?(String)
+      valid_string_array_value?(options)
+    end
+
+    def valid_string_array_value?(value)
+      value.nil? || value.is_a?(Array) || value.is_a?(String)
+    end
+
+    def valid_boolean_value?(value)
+      value.nil? || (value == true) || (value == false)
+    end
+
+    def valid_hash_value?(value)
+      value.nil? || value.is_a?(Hash)
     end
 
   end
