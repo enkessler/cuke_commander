@@ -1,6 +1,17 @@
 module CukeCommander
+
+  # The object responsible for generating Cucumber command lines.
   class CLGenerator
 
+    # Generates a Cucumber command line.
+    #
+    # Most option values are either an Array or a boolean value. In the case of the former, a
+    # String can be used instead of an Array when only a single value is needed. Some option
+    # values come in pairs (e.g. formatters and their output locations). These option values
+    # are taken as a Hash where a key is the first part of the pair and the key's value is the
+    # second part.
+    #
+    # @param options [Hash] the Cucumber options that the command line should include.
     def generate_command_line(options = {})
       validate_options(options)
       command_line = 'cucumber'
