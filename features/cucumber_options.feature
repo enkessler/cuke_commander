@@ -7,14 +7,28 @@ Feature: Cucumber options
 
   Scenario: Available Cucumber options
     * The following Cucumber options are available for use:
-      | profiles      |
-      | tags          |
-      | file_paths    |
-      | exclude_files |
-      | no_source     |
-      | formatters    |
-      | no_color      |
-      | options       |
+      | profiles   |
+      | tags       |
+      | file_paths |
+      | excludes   |
+      | no_source  |
+      | formatters |
+      | no_color   |
+      | color      |
+      | requires   |
+      | names      |
+      | dry_run    |
+      | backtrace  |
+      | strict     |
+      | verbose    |
+      | expand     |
+      | version    |
+      | help       |
+      | quiet      |
+      | wip        |
+      | guess      |
+      | no_profile |
+      | options    |
 
   Scenario: Generator will accept known options
     Given a command line generator

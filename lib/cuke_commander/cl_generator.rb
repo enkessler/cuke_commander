@@ -6,9 +6,11 @@ module CukeCommander
       command_line = 'cucumber'
 
       append_options(command_line, wrap_options(options[:profiles]), '-p')      if options[:profiles]
+      append_options(command_line, wrap_options(options[:names]), '-n')         if options[:names]
       append_options(command_line, wrap_options(options[:tags]), '-t')          if options[:tags]
       append_options(command_line, wrap_options(options[:file_paths]))          if options[:file_paths]
-      append_options(command_line, wrap_options(options[:exclude_files]), '-e') if options[:exclude_files]
+      append_options(command_line, wrap_options(options[:excludes]), '-e')      if options[:excludes]
+      append_options(command_line, wrap_options(options[:requires]), '-r')      if options[:requires]
       append_option(command_line, '-s')                                         if options[:no_source]
 
       if options[:formatters]
@@ -19,6 +21,19 @@ module CukeCommander
       end
 
       append_option(command_line, '--no-color')                     if options[:no_color]
+      append_option(command_line, '--color')                        if options[:color]
+      append_option(command_line, '-b')                             if options[:backtrace]
+      append_option(command_line, '-d')                             if options[:dry_run]
+      append_option(command_line, '-P')                             if options[:no_profile]
+      append_option(command_line, '-g')                             if options[:guess]
+      append_option(command_line, '-w')                             if options[:wip]
+      append_option(command_line, '-q')                             if options[:quiet]
+      append_option(command_line, '-v')                             if options[:verbose]
+      append_option(command_line, '--version')                      if options[:version]
+      append_option(command_line, '-h')                             if options[:help]
+      append_option(command_line, '-x')                             if options[:expand]
+      append_option(command_line, '-S')                             if options[:strict]
+
       append_options(command_line, wrap_options(options[:options])) if options[:options]
 
       command_line
@@ -39,9 +54,23 @@ module CukeCommander
       raise_invalid_error('Tags', 'a String or Array', options[:tags])                   unless valid_tags?(options[:tags])
       raise_invalid_error('File path', 'a String or Array', options[:file_paths])        unless valid_file_paths?(options[:file_paths])
       raise_invalid_error('Formatters', 'a Hash', options[:formatters])                  unless valid_formatters?(options[:formatters])
-      raise_invalid_error('Excluded file', 'a String or Array', options[:exclude_files]) unless valid_exclude_files?(options[:exclude_files])
+      raise_invalid_error('Excludes', 'a String or Array', options[:excludes])           unless valid_excludes?(options[:excludes])
       raise_invalid_error('No-source', 'true or false', options[:no_source])             unless valid_no_source?(options[:no_source])
       raise_invalid_error('No-color', 'true or false', options[:no_color])               unless valid_no_color?(options[:no_color])
+      raise_invalid_error('Color', 'true or false', options[:color])                     unless valid_color?(options[:color])
+      raise_invalid_error('Backtrace', 'true or false', options[:backtrace])             unless valid_backtrace?(options[:backtrace])
+      raise_invalid_error('Expand', 'true or false', options[:expand])                   unless valid_expand?(options[:expand])
+      raise_invalid_error('Guess', 'true or false', options[:guess])                     unless valid_guess?(options[:guess])
+      raise_invalid_error('Help', 'true or false', options[:help])                       unless valid_help?(options[:help])
+      raise_invalid_error('Dry run', 'true or false', options[:dry_run])                 unless valid_dry_run?(options[:dry_run])
+      raise_invalid_error('No profile', 'true or false', options[:no_profile])           unless valid_no_profile?(options[:no_profile])
+      raise_invalid_error('Quiet', 'true or false', options[:quiet])                     unless valid_quiet?(options[:quiet])
+      raise_invalid_error('Strict', 'true or false', options[:strict])                   unless valid_strict?(options[:strict])
+      raise_invalid_error('Verbose', 'true or false', options[:verbose])                 unless valid_verbose?(options[:verbose])
+      raise_invalid_error('Version', 'true or false', options[:version])                 unless valid_version?(options[:version])
+      raise_invalid_error('Wip', 'true or false', options[:wip])                         unless valid_wip?(options[:wip])
+      raise_invalid_error('Names', 'a String or Array', options[:names])                 unless valid_names?(options[:names])
+      raise_invalid_error('Requires', 'a String or Array', options[:requires])           unless valid_requires?(options[:requires])
       raise_invalid_error('Options', 'a String or Array', options[:options])             unless valid_options?(options[:options])
     end
 
@@ -80,8 +109,8 @@ module CukeCommander
       formatters.nil? || formatters.is_a?(Hash)
     end
 
-    def valid_exclude_files?(exclude_files)
-      exclude_files.nil? || exclude_files.is_a?(Array) || exclude_files.is_a?(String)
+    def valid_excludes?(excludes)
+      excludes.nil? || excludes.is_a?(Array) || excludes.is_a?(String)
     end
 
     def valid_no_source?(no_source)
@@ -90,6 +119,62 @@ module CukeCommander
 
     def valid_no_color?(no_color)
       no_color.nil? || (no_color == true) || (no_color == false)
+    end
+
+    def valid_color?(color)
+      color.nil? || (color == true) || (color == false)
+    end
+
+    def valid_backtrace?(backtrace)
+      backtrace.nil? || (backtrace == true) || (backtrace == false)
+    end
+
+    def valid_wip?(wip)
+      wip.nil? || (wip == true) || (wip == false)
+    end
+
+    def valid_no_profile?(no_profile)
+      no_profile.nil? || (no_profile == true) || (no_profile == false)
+    end
+
+    def valid_expand?(expand)
+      expand.nil? || (expand == true) || (expand == false)
+    end
+
+    def valid_strict?(strict)
+      strict.nil? || (strict == true) || (strict == false)
+    end
+
+    def valid_verbose?(verbose)
+      verbose.nil? || (verbose == true) || (verbose == false)
+    end
+
+    def valid_version?(version)
+      version.nil? || (version == true) || (version == false)
+    end
+
+    def valid_quiet?(quiet)
+      quiet.nil? || (quiet == true) || (quiet == false)
+    end
+
+    def valid_guess?(guess)
+      guess.nil? || (guess == true) || (guess == false)
+    end
+
+    def valid_help?(help)
+      help.nil? || (help == true) || (help == false)
+    end
+
+    def valid_dry_run?(dry_run)
+      dry_run.nil? || (dry_run == true) || (dry_run == false)
+    end
+
+    def valid_names?(names)
+      names.nil? || names.is_a?(Array) || names.is_a?(String)
+    end
+
+    def valid_requires?(requires)
+      requires.nil? || requires.is_a?(Array) || requires.is_a?(String)
     end
 
     def valid_options?(options)

@@ -11,6 +11,11 @@ When(/^I ask for a cucumber command line with the following profiles$/) do |prof
   @command_line = @commander.generate_command_line(options)
 end
 
+When(/^I ask for a cucumber command line with a no\-profile flag$/) do
+  @options = {no_profile: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
 When(/^I ask for a cucumber command line with the following tags$/) do |tags|
   @options = {tags: tags.raw.flatten}
   @command_line = @commander.generate_command_line(@options)
@@ -21,8 +26,8 @@ When(/^I ask for a cucumber command line with the following file-paths$/) do |ta
   @command_line = @commander.generate_command_line(@options)
 end
 
-When(/^I ask for a cucumber command line with the following exclude-files$/) do |table|
-  @options = {exclude_files: table.raw.flatten}
+When(/^I ask for a cucumber command line with the following exclude patterns$/) do |table|
+  @options = {excludes: table.raw.flatten}
   @command_line = @commander.generate_command_line(@options)
 end
 
@@ -33,6 +38,11 @@ end
 
 When(/^I ask for a cucumber command line with a no-color flag$/) do
   @options = {no_color: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a color flag$/) do
+  @options = {color: true}
   @command_line = @commander.generate_command_line(@options)
 end
 
@@ -83,4 +93,64 @@ end
 When(/I ask for a cucumber command line with the following additional options$/) do |options|
   @options = {options: options.raw.flatten}
   @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a backtrace flag$/) do
+  @options = {backtrace: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a dry run flag$/) do
+  @options = {dry_run: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a guess flag$/) do
+  @options = {guess: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a wip flag$/) do
+  @options = {wip: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a quiet flag$/) do
+  @options = {quiet: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a help flag$/) do
+  @options = {help: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a version flag$/) do
+  @options = {version: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a strict flag$/) do
+  @options = {strict: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with a verbose flag$/) do
+  @options = {verbose: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with an expand flag$/) do
+  @options = {expand: true}
+  @command_line = @commander.generate_command_line(@options)
+end
+
+When(/^I ask for a cucumber command line with the name patterns$/) do |names|
+  options = {names: names.raw.flatten}
+  @command_line = @commander.generate_command_line(options)
+end
+
+When(/^I ask for a cucumber command line with the following required files$/) do |requires|
+  options = {requires: requires.raw.flatten}
+  @command_line = @commander.generate_command_line(options)
 end

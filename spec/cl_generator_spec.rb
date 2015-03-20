@@ -30,10 +30,25 @@ describe 'CLGenerator, Unit' do
                    tags: 'foo',
                    file_paths: 'foo',
                    formatters: {some_formatter: 'some_file.txt'},
-                   exclude_files: 'foo',
+                   excludes: 'foo',
                    no_source: true,
                    no_color: true,
-                   options: 'foo'}
+                   options: 'foo',
+                   backtrace: true,
+                   color: true,
+                   dry_run: true,
+                   expand: true,
+                   guess: true,
+                   help: true,
+                   names: 'foo',
+                   no_profile: true,
+                   quiet: true,
+                   requires: 'foo',
+                   strict: true,
+                   verbose: true,
+                   version: true,
+                   wip: true
+    }
 
     let(:test_options) { all_options.dup }
     let(:bad_value) { 7 }
@@ -108,10 +123,10 @@ describe 'CLGenerator, Unit' do
       expect { generator.generate_command_line({formatters: bad_value}) }.to raise_error(ArgumentError, /must.*Hash.*got.*#{bad_value.class}/)
     end
 
-    it 'only accepts a string or array as an excluded file value' do
-      expect { generator.generate_command_line({exclude_files: 'foo'}) }.to_not raise_error
-      expect { generator.generate_command_line({exclude_files: ['foo', 'bar']}) }.to_not raise_error
-      expect { generator.generate_command_line({exclude_files: bad_value}) }.to raise_error(ArgumentError, /must.*String or Array.*got.*#{bad_value.class}/)
+    it 'only accepts a string or array as an excluded patterns value' do
+      expect { generator.generate_command_line({excludes: 'foo'}) }.to_not raise_error
+      expect { generator.generate_command_line({excludes: ['foo', 'bar']}) }.to_not raise_error
+      expect { generator.generate_command_line({excludes: bad_value}) }.to raise_error(ArgumentError, /must.*String or Array.*got.*#{bad_value.class}/)
     end
 
     it 'only accepts a boolean as a no-source value' do
@@ -124,6 +139,90 @@ describe 'CLGenerator, Unit' do
       expect { generator.generate_command_line({no_color: true}) }.to_not raise_error
       expect { generator.generate_command_line({no_color: false}) }.to_not raise_error
       expect { generator.generate_command_line({no_color: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a color value' do
+      expect { generator.generate_command_line({color: true}) }.to_not raise_error
+      expect { generator.generate_command_line({color: false}) }.to_not raise_error
+      expect { generator.generate_command_line({color: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a backtrace value' do
+      expect { generator.generate_command_line({backtrace: true}) }.to_not raise_error
+      expect { generator.generate_command_line({backtrace: false}) }.to_not raise_error
+      expect { generator.generate_command_line({backtrace: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a dry run value' do
+      expect { generator.generate_command_line({dry_run: true}) }.to_not raise_error
+      expect { generator.generate_command_line({dry_run: false}) }.to_not raise_error
+      expect { generator.generate_command_line({dry_run: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as an expand value' do
+      expect { generator.generate_command_line({expand: true}) }.to_not raise_error
+      expect { generator.generate_command_line({expand: false}) }.to_not raise_error
+      expect { generator.generate_command_line({expand: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a guess value' do
+      expect { generator.generate_command_line({guess: true}) }.to_not raise_error
+      expect { generator.generate_command_line({guess: false}) }.to_not raise_error
+      expect { generator.generate_command_line({guess: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a help value' do
+      expect { generator.generate_command_line({help: true}) }.to_not raise_error
+      expect { generator.generate_command_line({help: false}) }.to_not raise_error
+      expect { generator.generate_command_line({help: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a quiet value' do
+      expect { generator.generate_command_line({quiet: true}) }.to_not raise_error
+      expect { generator.generate_command_line({quiet: false}) }.to_not raise_error
+      expect { generator.generate_command_line({quiet: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a strict value' do
+      expect { generator.generate_command_line({strict: true}) }.to_not raise_error
+      expect { generator.generate_command_line({strict: false}) }.to_not raise_error
+      expect { generator.generate_command_line({strict: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a verbose value' do
+      expect { generator.generate_command_line({verbose: true}) }.to_not raise_error
+      expect { generator.generate_command_line({verbose: false}) }.to_not raise_error
+      expect { generator.generate_command_line({verbose: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a version value' do
+      expect { generator.generate_command_line({version: true}) }.to_not raise_error
+      expect { generator.generate_command_line({version: false}) }.to_not raise_error
+      expect { generator.generate_command_line({version: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a wip value' do
+      expect { generator.generate_command_line({wip: true}) }.to_not raise_error
+      expect { generator.generate_command_line({wip: false}) }.to_not raise_error
+      expect { generator.generate_command_line({wip: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a boolean as a no profile value' do
+      expect { generator.generate_command_line({no_profile: true}) }.to_not raise_error
+      expect { generator.generate_command_line({no_profile: false}) }.to_not raise_error
+      expect { generator.generate_command_line({no_profile: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a string or array as a require value' do
+      expect { generator.generate_command_line({requires: 'foo'}) }.to_not raise_error
+      expect { generator.generate_command_line({requires: ['foo', 'bar']}) }.to_not raise_error
+      expect { generator.generate_command_line({requires: bad_value}) }.to raise_error(ArgumentError, /must.*String or Array.*got.*#{bad_value.class}/)
+    end
+
+    it 'only accepts a string or array as a name value' do
+      expect { generator.generate_command_line({names: 'foo'}) }.to_not raise_error
+      expect { generator.generate_command_line({names: ['foo', 'bar']}) }.to_not raise_error
+      expect { generator.generate_command_line({names: bad_value}) }.to raise_error(ArgumentError, /must.*String or Array.*got.*#{bad_value.class}/)
     end
 
     it 'only accepts a string or array as an options value' do

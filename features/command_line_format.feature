@@ -13,7 +13,7 @@ Feature: Command line formatting
     Then  I am given the following cucumber command line
       | cucumber |
 
-  Scenario: Profile format
+  Scenario: Profile flag format
     When  I ask for a cucumber command line with the following profiles
       | profile_1 |
     Then  I am given the following cucumber command line
@@ -24,7 +24,12 @@ Feature: Command line formatting
     Then  I am given the following cucumber command line
       | cucumber -p profile_2 -p profile_3 |
 
-  Scenario: Tag format
+  Scenario: No-profile flag format
+    When  I ask for a cucumber command line with a no-profile flag
+    Then  I am given the following cucumber command line
+      | cucumber -P |
+
+  Scenario: Tag flag format
     When  I ask for a cucumber command line with the following tags
       | @tag_1 |
     Then  I am given the following cucumber command line
@@ -35,7 +40,7 @@ Feature: Command line formatting
     Then  I am given the following cucumber command line
       | cucumber -t @tag_2 -t @tag_3,@tag4 |
 
-  Scenario: File-path format
+  Scenario: File-path flag format
     When  I ask for a cucumber command line with the following file-paths
       | features/common |
     Then  I am given the following cucumber command line
@@ -46,28 +51,33 @@ Feature: Command line formatting
     Then  I am given the following cucumber command line
       | cucumber features/some_dir features/some_other_dir |
 
-  Scenario: Exclude-file format
-    When  I ask for a cucumber command line with the following exclude-files
-      | features/test1 |
+  Scenario: Exclude pattern flag format
+    When  I ask for a cucumber command line with the following exclude patterns
+      | pattern_1 |
     Then  I am given the following cucumber command line
-      | cucumber -e features/test1 |
-    When  I ask for a cucumber command line with the following exclude-files
-      | features/test2 |
-      | features/test3 |
+      | cucumber -e pattern_1 |
+    When  I ask for a cucumber command line with the following exclude patterns
+      | pattern_2 |
+      | pattern_3 |
     Then  I am given the following cucumber command line
-      | cucumber -e features/test2 -e features/test3 |
+      | cucumber -e pattern_2 -e pattern_3 |
 
-  Scenario: No-source format
+  Scenario: No-source flag format
     When  I ask for a cucumber command line with a no-source flag
     Then  I am given the following cucumber command line
       | cucumber -s |
 
-  Scenario: No-color format
+  Scenario: No-color flag format
     When  I ask for a cucumber command line with a no-color flag
     Then  I am given the following cucumber command line
       | cucumber --no-color |
 
-  Scenario: Formatter format
+  Scenario: Color flag format
+    When  I ask for a cucumber command line with a color flag
+    Then  I am given the following cucumber command line
+      | cucumber --color |
+
+  Scenario: Formatter flag format
     When  I ask for a cucumber command line with the following formatters
       | formatter | output_location |
       | json      | STDOUT          |
@@ -79,6 +89,78 @@ Feature: Command line formatting
       | html      | output.html     |
     Then  I am given the following cucumber command line
       | cucumber -f pretty -f html -o output.html |
+
+  Scenario: Backtrace flag format
+    When  I ask for a cucumber command line with a backtrace flag
+    Then  I am given the following cucumber command line
+      | cucumber -b |
+
+  Scenario: Dry run flag format
+    When  I ask for a cucumber command line with a dry run flag
+    Then  I am given the following cucumber command line
+      | cucumber -d |
+
+  Scenario: Guess flag format
+    When  I ask for a cucumber command line with a guess flag
+    Then  I am given the following cucumber command line
+      | cucumber -g |
+
+  Scenario: WIP flag format
+    When  I ask for a cucumber command line with a wip flag
+    Then  I am given the following cucumber command line
+      | cucumber -w |
+
+  Scenario: Quiet flag format
+    When  I ask for a cucumber command line with a quiet flag
+    Then  I am given the following cucumber command line
+      | cucumber -q |
+
+  Scenario: Help flag format
+    When  I ask for a cucumber command line with a help flag
+    Then  I am given the following cucumber command line
+      | cucumber -h |
+
+  Scenario: Version flag format
+    When  I ask for a cucumber command line with a version flag
+    Then  I am given the following cucumber command line
+      | cucumber --version |
+
+  Scenario: Strict flag format
+    When  I ask for a cucumber command line with a strict flag
+    Then  I am given the following cucumber command line
+      | cucumber -S |
+
+  Scenario: Verbose flag format
+    When  I ask for a cucumber command line with a verbose flag
+    Then  I am given the following cucumber command line
+      | cucumber -v |
+
+  Scenario: Expand flag format
+    When  I ask for a cucumber command line with an expand flag
+    Then  I am given the following cucumber command line
+      | cucumber -x |
+
+  Scenario: Name flag format
+    When  I ask for a cucumber command line with the name patterns
+      | pattern_1 |
+    Then  I am given the following cucumber command line
+      | cucumber -n pattern_1 |
+    When  I ask for a cucumber command line with the name patterns
+      | pattern_2 |
+      | pattern_3 |
+    Then  I am given the following cucumber command line
+      | cucumber -n pattern_2 -n pattern_3 |
+
+  Scenario: Require flag format
+    When  I ask for a cucumber command line with the following required files
+      | features/foo.rb |
+    Then  I am given the following cucumber command line
+      | cucumber -r features/foo.rb |
+    When  I ask for a cucumber command line with the following required files
+      | features/bar.rb     |
+      | features/bar/baz.rb |
+    Then  I am given the following cucumber command line
+      | cucumber -r features/bar.rb -r features/bar/baz.rb |
 
   Scenario: Additional options format
 
