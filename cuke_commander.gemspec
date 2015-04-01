@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = CukeCommander::VERSION
   spec.authors       = ["Eric Kessler", 'Donavan Stanley']
   spec.email         = ["morrow748@gmail.com", 'stanleyd@grangeinsurance.com']
-  spec.description   = %q{Command Cucumber}
-  spec.summary       = %q{Provides an easy way to build a cucumber commandline.}
+  spec.summary       = %q{Command Cucumber}
+  spec.description   = %q{Provides an easy way to build a cucumber commandline.}
   spec.homepage      = "https://github.com/grange-insurance/cuke_commander"
   spec.license       = "MIT"
 
