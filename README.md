@@ -1,5 +1,7 @@
 # CukeCommander
 
+<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" height="18"></a>
+
 The cuke_commander gem provides an easy and programmatic way to build a command line for running Cucumber.
 
 ## Installation
