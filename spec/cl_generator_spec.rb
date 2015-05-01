@@ -47,7 +47,8 @@ describe 'CLGenerator, Unit' do
                    strict: true,
                    verbose: true,
                    version: true,
-                   wip: true
+                   wip: true,
+                   long_flags: false
     }
 
     let(:test_options) { all_options.dup }
@@ -230,6 +231,13 @@ describe 'CLGenerator, Unit' do
       expect { generator.generate_command_line({options: ['foo', 'bar']}) }.to_not raise_error
       expect { generator.generate_command_line({options: bad_value}) }.to raise_error(ArgumentError, /must.*String or Array.*got.*#{bad_value.class}/)
     end
+
+    it 'only accepts a boolean as a long flag value' do
+      expect { generator.generate_command_line({long_flags: true}) }.to_not raise_error
+      expect { generator.generate_command_line({long_flags: false}) }.to_not raise_error
+      expect { generator.generate_command_line({long_flags: bad_value}) }.to raise_error(ArgumentError, /must.*true or false.*got.*#{bad_value.class}/)
+    end
+
   end
 
   describe 'old bugs' do

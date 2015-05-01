@@ -6,5 +6,5 @@ require "cuke_commander/cl_generator"
 module CukeCommander
 
   # The Cucumber options that are currently supported by the gem.
-  CUKE_OPTIONS = %w{ profiles tags file_paths formatters excludes no_source no_color options backtrace color dry_run expand guess help names no_profile quiet requires strict verbose version wip}
+  CUKE_OPTIONS = %w{long_flags profiles tags file_paths formatters excludes no_source no_color options backtrace color dry_run expand guess help names no_profile quiet requires strict verbose version wip}
 end

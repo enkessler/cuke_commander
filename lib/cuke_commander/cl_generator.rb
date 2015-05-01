@@ -16,36 +16,36 @@ module CukeCommander
       validate_options(options)
       command_line = 'cucumber'
 
-      append_options(command_line, wrap_options(options[:profiles]), '-p')      if options[:profiles]
-      append_options(command_line, wrap_options(options[:names]), '-n')         if options[:names]
-      append_options(command_line, wrap_options(options[:tags]), '-t')          if options[:tags]
-      append_options(command_line, wrap_options(options[:file_paths]))          if options[:file_paths]
-      append_options(command_line, wrap_options(options[:excludes]), '-e')      if options[:excludes]
-      append_options(command_line, wrap_options(options[:requires]), '-r')      if options[:requires]
-      append_option(command_line, '-s')                                         if options[:no_source]
+      append_options(command_line, wrap_options(options[:profiles]),   flag_for(:profiles, options[:long_flags]))    if options[:profiles]
+      append_options(command_line, wrap_options(options[:names]),      flag_for(:names, options[:long_flags]))       if options[:names]
+      append_options(command_line, wrap_options(options[:tags]),       flag_for(:tags, options[:long_flags]))        if options[:tags]
+      append_options(command_line, wrap_options(options[:file_paths]))                                               if options[:file_paths]
+      append_options(command_line, wrap_options(options[:excludes]),   flag_for(:excludes, options[:long_flags]))    if options[:excludes]
+      append_options(command_line, wrap_options(options[:requires]),   flag_for(:requires, options[:long_flags]))    if options[:requires]
+      append_option(command_line,                                      flag_for(:no_source, options[:long_flags]))   if options[:no_source]
 
       if options[:formatters]
         options[:formatters].each do |format, output_location|
-          append_option(command_line, format, '-f')
-          append_option(command_line, output_location, '-o') unless output_location.to_s.empty?
+          append_option(command_line, format, flag_for(:format, options[:long_flags]))
+          append_option(command_line, output_location,flag_for(:output, options[:long_flags])) unless output_location.to_s.empty?
         end
       end
 
-      append_option(command_line, '--no-color')                     if options[:no_color]
-      append_option(command_line, '--color')                        if options[:color]
-      append_option(command_line, '-b')                             if options[:backtrace]
-      append_option(command_line, '-d')                             if options[:dry_run]
-      append_option(command_line, '-P')                             if options[:no_profile]
-      append_option(command_line, '-g')                             if options[:guess]
-      append_option(command_line, '-w')                             if options[:wip]
-      append_option(command_line, '-q')                             if options[:quiet]
-      append_option(command_line, '-v')                             if options[:verbose]
-      append_option(command_line, '--version')                      if options[:version]
-      append_option(command_line, '-h')                             if options[:help]
-      append_option(command_line, '-x')                             if options[:expand]
-      append_option(command_line, '-S')                             if options[:strict]
+      append_option(command_line, flag_for(:no_color,options[:long_flags]))                                      if options[:no_color]
+      append_option(command_line, flag_for(:color,options[:long_flags]))                                         if options[:color]
+      append_option(command_line, flag_for(:backtrace,options[:long_flags]))                                     if options[:backtrace]
+      append_option(command_line, flag_for(:dry_run,options[:long_flags]))                                       if options[:dry_run]
+      append_option(command_line, flag_for(:no_profile,options[:long_flags]))                                    if options[:no_profile]
+      append_option(command_line, flag_for(:guess,options[:long_flags]))                                         if options[:guess]
+      append_option(command_line, flag_for(:wip,options[:long_flags]))                                           if options[:wip]
+      append_option(command_line, flag_for(:quiet,options[:long_flags]))                                         if options[:quiet]
+      append_option(command_line, flag_for(:verbose,options[:long_flags]))                                       if options[:verbose]
+      append_option(command_line, flag_for(:version,options[:long_flags]))                                       if options[:version]
+      append_option(command_line, flag_for(:help,options[:long_flags]))                                          if options[:help]
+      append_option(command_line, flag_for(:expand,options[:long_flags]))                                        if options[:expand]
+      append_option(command_line, flag_for(:strict,options[:long_flags]))                                        if options[:strict]
 
-      append_options(command_line, wrap_options(options[:options])) if options[:options]
+      append_options(command_line, wrap_options(options[:options]))                                              if options[:options]
 
       command_line
     end
@@ -83,6 +83,7 @@ module CukeCommander
       raise_invalid_error('Names', 'a String or Array', options[:names])                 unless valid_names?(options[:names])
       raise_invalid_error('Requires', 'a String or Array', options[:requires])           unless valid_requires?(options[:requires])
       raise_invalid_error('Options', 'a String or Array', options[:options])             unless valid_options?(options[:options])
+      raise_invalid_error('Long Flags', 'true or false', options[:long_flags])           unless valid_long_flags?(options[:long_flags])
     end
 
     def append_options(command, option_set, flag= nil)
@@ -192,6 +193,10 @@ module CukeCommander
       valid_string_array_value?(options)
     end
 
+    def valid_long_flags?(long_flag)
+      valid_boolean_value?(long_flag)
+    end
+
     def valid_string_array_value?(value)
       value.nil? || value.is_a?(Array) || value.is_a?(String)
     end
@@ -202,6 +207,53 @@ module CukeCommander
 
     def valid_hash_value?(value)
       value.nil? || value.is_a?(Hash)
+    end
+
+    def flag_for(option, long_flags)
+      case option
+        when :tags
+          long_flags ? '--tags' : '-t'
+        when :profiles
+          long_flags ? '--profile' : '-p'
+        when :names
+          long_flags ? '--name' : '-n'
+        when :excludes
+          long_flags ? '--exclude' : '-e'
+        when :requires
+          long_flags ? '--require' : '-r'
+        when :backtrace
+          long_flags ? '--backtrace' : '-b'
+        when :color
+          long_flags ? '--color' : '-c'
+        when :no_color
+          '--no-color'
+        when :dry_run
+          long_flags ? '--dry-run' : '-d'
+        when :guess
+          long_flags ? '--guess' : '-g'
+        when :wip
+          long_flags ? '--wip' : '-w'
+        when :quiet
+          long_flags ? '--quiet' : '-q'
+        when :help
+          long_flags ? '--help' : '-h'
+        when :verbose
+          long_flags ? '--verbose' : '-v'
+        when :version
+          '--version'
+        when :strict
+          long_flags ? '--strict' : '-S'
+        when :expand
+          long_flags ? '--expand' : '-x'
+        when :no_source
+          long_flags ? '--no-source' : '-s'
+        when :no_profile
+          long_flags ? '--no-profile' : '-P'
+        when :format
+          long_flags ? '--format' : '-f'
+        when :output
+          long_flags ? '--out' : '-o'
+      end
     end
 
   end

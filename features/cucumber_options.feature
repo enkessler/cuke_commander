@@ -29,6 +29,7 @@ Feature: Cucumber options
       | guess      |
       | no_profile |
       | options    |
+      | long_flags |
 
   Scenario: Generator will accept known options
     Given a command line generator
