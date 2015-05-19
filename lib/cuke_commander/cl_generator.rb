@@ -16,13 +16,11 @@ module CukeCommander
       validate_options(options)
       command_line = 'cucumber'
 
-      append_options(command_line, wrap_options(options[:profiles]),   flag_for(:profiles, options[:long_flags]))    if options[:profiles]
-      append_options(command_line, wrap_options(options[:names]),      flag_for(:names, options[:long_flags]))       if options[:names]
-      append_options(command_line, wrap_options(options[:tags]),       flag_for(:tags, options[:long_flags]))        if options[:tags]
-      append_options(command_line, wrap_options(options[:file_paths]))                                               if options[:file_paths]
-      append_options(command_line, wrap_options(options[:excludes]),   flag_for(:excludes, options[:long_flags]))    if options[:excludes]
-      append_options(command_line, wrap_options(options[:requires]),   flag_for(:requires, options[:long_flags]))    if options[:requires]
-      append_option(command_line,                                      flag_for(:no_source, options[:long_flags]))   if options[:no_source]
+      %w(profiles names tags excludes requires).each do |option|
+        append_options(command_line, wrap_options(options[option.to_sym]), flag_for(option.to_sym, options[:long_flags])) if options[option.to_sym]
+      end
+      append_options(command_line, wrap_options(options[:file_paths])) if options[:file_paths]
+      append_option(command_line, flag_for(:no_source, options[:long_flags]))  if options[:no_source]
 
       if options[:formatters]
         options[:formatters].each do |format, output_location|
@@ -31,19 +29,9 @@ module CukeCommander
         end
       end
 
-      append_option(command_line, flag_for(:no_color,options[:long_flags]))                                      if options[:no_color]
-      append_option(command_line, flag_for(:color,options[:long_flags]))                                         if options[:color]
-      append_option(command_line, flag_for(:backtrace,options[:long_flags]))                                     if options[:backtrace]
-      append_option(command_line, flag_for(:dry_run,options[:long_flags]))                                       if options[:dry_run]
-      append_option(command_line, flag_for(:no_profile,options[:long_flags]))                                    if options[:no_profile]
-      append_option(command_line, flag_for(:guess,options[:long_flags]))                                         if options[:guess]
-      append_option(command_line, flag_for(:wip,options[:long_flags]))                                           if options[:wip]
-      append_option(command_line, flag_for(:quiet,options[:long_flags]))                                         if options[:quiet]
-      append_option(command_line, flag_for(:verbose,options[:long_flags]))                                       if options[:verbose]
-      append_option(command_line, flag_for(:version,options[:long_flags]))                                       if options[:version]
-      append_option(command_line, flag_for(:help,options[:long_flags]))                                          if options[:help]
-      append_option(command_line, flag_for(:expand,options[:long_flags]))                                        if options[:expand]
-      append_option(command_line, flag_for(:strict,options[:long_flags]))                                        if options[:strict]
+      %w(no_color color backtrace dry_run no_profile guess wip quiet verbose version help expand strict).each do |option|
+        append_option(command_line, flag_for(option.to_sym,options[:long_flags])) if options[option.to_sym]
+      end
 
       append_options(command_line, wrap_options(options[:options]))                                              if options[:options]
 
@@ -61,29 +49,11 @@ module CukeCommander
         raise(ArgumentError, "Option: #{option}, is not a cucumber option") unless CUKE_OPTIONS.include?(option.to_s)
       end
 
-      raise_invalid_error('Profiles', 'a String or Array', options[:profiles])           unless valid_profiles?(options[:profiles])
-      raise_invalid_error('Tags', 'a String or Array', options[:tags])                   unless valid_tags?(options[:tags])
-      raise_invalid_error('File path', 'a String or Array', options[:file_paths])        unless valid_file_paths?(options[:file_paths])
-      raise_invalid_error('Formatters', 'a Hash', options[:formatters])                  unless valid_formatters?(options[:formatters])
-      raise_invalid_error('Excludes', 'a String or Array', options[:excludes])           unless valid_excludes?(options[:excludes])
-      raise_invalid_error('No-source', 'true or false', options[:no_source])             unless valid_no_source?(options[:no_source])
-      raise_invalid_error('No-color', 'true or false', options[:no_color])               unless valid_no_color?(options[:no_color])
-      raise_invalid_error('Color', 'true or false', options[:color])                     unless valid_color?(options[:color])
-      raise_invalid_error('Backtrace', 'true or false', options[:backtrace])             unless valid_backtrace?(options[:backtrace])
-      raise_invalid_error('Expand', 'true or false', options[:expand])                   unless valid_expand?(options[:expand])
-      raise_invalid_error('Guess', 'true or false', options[:guess])                     unless valid_guess?(options[:guess])
-      raise_invalid_error('Help', 'true or false', options[:help])                       unless valid_help?(options[:help])
-      raise_invalid_error('Dry run', 'true or false', options[:dry_run])                 unless valid_dry_run?(options[:dry_run])
-      raise_invalid_error('No profile', 'true or false', options[:no_profile])           unless valid_no_profile?(options[:no_profile])
-      raise_invalid_error('Quiet', 'true or false', options[:quiet])                     unless valid_quiet?(options[:quiet])
-      raise_invalid_error('Strict', 'true or false', options[:strict])                   unless valid_strict?(options[:strict])
-      raise_invalid_error('Verbose', 'true or false', options[:verbose])                 unless valid_verbose?(options[:verbose])
-      raise_invalid_error('Version', 'true or false', options[:version])                 unless valid_version?(options[:version])
-      raise_invalid_error('Wip', 'true or false', options[:wip])                         unless valid_wip?(options[:wip])
-      raise_invalid_error('Names', 'a String or Array', options[:names])                 unless valid_names?(options[:names])
-      raise_invalid_error('Requires', 'a String or Array', options[:requires])           unless valid_requires?(options[:requires])
-      raise_invalid_error('Options', 'a String or Array', options[:options])             unless valid_options?(options[:options])
-      raise_invalid_error('Long Flags', 'true or false', options[:long_flags])           unless valid_long_flags?(options[:long_flags])
+      %w(Profiles Tags File\ paths Formatters Excludes No-source No-color Color Backtrace Expand Guess Help Dry\ run No\ profile Quiet Strict Verbose Version Wip Names Requires Options Long\ Flags).each do |option|
+        option_string = option.gsub('-','_').gsub(' ','_').downcase
+        option_symbol = option_string.to_sym
+        raise_invalid_error(option, 'a String or Array', options[option_symbol]) unless self.send("valid_#{option_string}?", (options[option_symbol]))
+      end
     end
 
     def append_options(command, option_set, flag= nil)
@@ -105,97 +75,120 @@ module CukeCommander
       raise(ArgumentError, "#{option} option must be #{valid_types}, got: #{value_used.class}")
     end
 
-    def valid_profiles?(profiles)
-      valid_string_array_value?(profiles)
+    string_array_valids = %w(profiles tags file_paths excludes names requires options)
+    hash_valids = %w(formatters)
+    boolean_valids = %w(no_source no_color color backtrace wip no_profile expand
+                        strict verbose version quiet guess help dry_run long_flags)
+
+    string_array_valids.each do |check_this|
+      define_method("valid_#{check_this}?".to_sym) do |check_this|
+        valid_string_array_value?(check_this)
+      end
     end
 
-    def valid_tags?(tags)
-      valid_string_array_value?(tags)
+    hash_valids.each do |check_this|
+      define_method("valid_#{check_this}?".to_sym) do |check_this|
+        valid_hash_value?(check_this)
+      end
     end
 
-    def valid_file_paths?(file_paths)
-      valid_string_array_value?(file_paths)
+    boolean_valids.each do |check_this|
+      define_method("valid_#{check_this}?".to_sym) do |check_this|
+        valid_boolean_value?(check_this)
+      end
     end
 
-    def valid_formatters?(formatters)
-      valid_hash_value?(formatters)
-    end
+    # def valid_profiles?(profiles)
+    #   valid_string_array_value?(profiles)
+    # end
 
-    def valid_excludes?(excludes)
-      valid_string_array_value?(excludes)
-    end
+    # def valid_tags?(tags)
+    #   valid_string_array_value?(tags)
+    # end
 
-    def valid_no_source?(no_source)
-      valid_boolean_value?(no_source)
-    end
+    # def valid_file_paths?(file_paths)
+    #   valid_string_array_value?(file_paths)
+    # end
 
-    def valid_no_color?(no_color)
-      valid_boolean_value?(no_color)
-    end
+    # def valid_formatters?(formatters)
+    #   valid_hash_value?(formatters)
+    # end
 
-    def valid_color?(color)
-      valid_boolean_value?(color)
-    end
+    # def valid_excludes?(excludes)
+    #   valid_string_array_value?(excludes)
+    # end
 
-    def valid_backtrace?(backtrace)
-      valid_boolean_value?(backtrace)
-    end
+    # def valid_no_source?(no_source)
+    #   valid_boolean_value?(no_source)
+    # end
 
-    def valid_wip?(wip)
-      valid_boolean_value?(wip)
-    end
+    # def valid_no_color?(no_color)
+    #   valid_boolean_value?(no_color)
+    # end
 
-    def valid_no_profile?(no_profile)
-      valid_boolean_value?(no_profile)
-    end
+    # def valid_color?(color)
+    #   valid_boolean_value?(color)
+    # end
 
-    def valid_expand?(expand)
-      valid_boolean_value?(expand)
-    end
+    # def valid_backtrace?(backtrace)
+    #   valid_boolean_value?(backtrace)
+    # end
 
-    def valid_strict?(strict)
-      valid_boolean_value?(strict)
-    end
+    # def valid_wip?(wip)
+    #   valid_boolean_value?(wip)
+    # end
 
-    def valid_verbose?(verbose)
-      valid_boolean_value?(verbose)
-    end
+    # def valid_no_profile?(no_profile)
+    #   valid_boolean_value?(no_profile)
+    # end
 
-    def valid_version?(version)
-      valid_boolean_value?(version)
-    end
+    # def valid_expand?(expand)
+    #   valid_boolean_value?(expand)
+    # end
 
-    def valid_quiet?(quiet)
-      valid_boolean_value?(quiet)
-    end
+    # def valid_strict?(strict)
+    #   valid_boolean_value?(strict)
+    # end
 
-    def valid_guess?(guess)
-      valid_boolean_value?(guess)
-    end
+    # def valid_verbose?(verbose)
+    #   valid_boolean_value?(verbose)
+    # end
 
-    def valid_help?(help)
-      valid_boolean_value?(help)
-    end
+    # def valid_version?(version)
+    #   valid_boolean_value?(version)
+    # end
 
-    def valid_dry_run?(dry_run)
-      valid_boolean_value?(dry_run)
-    end
+    # def valid_quiet?(quiet)
+    #   valid_boolean_value?(quiet)
+    # end
 
-    def valid_names?(names)
-      valid_string_array_value?(names)
-    end
+    # def valid_guess?(guess)
+    #   valid_boolean_value?(guess)
+    # end
 
-    def valid_requires?(requires)
-      valid_string_array_value?(requires)
-    end
+    # def valid_help?(help)
+    #   valid_boolean_value?(help)
+    # end
 
-    def valid_options?(options)
-      valid_string_array_value?(options)
-    end
+    # def valid_dry_run?(dry_run)
+    #   valid_boolean_value?(dry_run)
+    # end
 
-    def valid_long_flags?(long_flag)
-      valid_boolean_value?(long_flag)
-    end
+    # def valid_names?(names)
+    #   valid_string_array_value?(names)
+    # end
+
+    # def valid_requires?(requires)
+    #   valid_string_array_value?(requires)
+    # end
+
+    # def valid_options?(options)
+    #   valid_string_array_value?(options)
+    # end
+
+    # def valid_long_flags?(long_flag)
+    #   valid_boolean_value?(long_flag)
+    # end
 
     def valid_string_array_value?(value)
       value.nil? || value.is_a?(Array) || value.is_a?(String)
