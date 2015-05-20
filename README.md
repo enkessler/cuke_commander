@@ -1,7 +1,6 @@
 # CukeCommander
 
-[![Build Status](https://travis-ci.org/djmiller7/cuke-commander.png)](https://travis-ci.org/djmiller7/cuke-commander)
-
+https://travis-ci.org/djmiller7/cuke_commander.svg?branch=master
 <a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" height="18"></a>
 
 <a href="https://codeclimate.com/github/grange-insurance/cuke_commander"><img src="https://codeclimate.com/github/grange-insurance/cuke_commander/badges/gpa.svg" /></a>
