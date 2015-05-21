@@ -1,6 +1,6 @@
 # CukeCommander
 
-<a href="https://travis-ci.org/djmiller7/cuke_commander"><img src="https://travis-ci.org/djmiller7/cuke_commander.svg?branch=master" /></a>
+<a href="https://travis-ci.org/grange-insurance/cuke_commander"><img src="https://travis-ci.org/grange-insurance/cuke_commander.svg" /></a>
 
 
 <a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" /></a>
