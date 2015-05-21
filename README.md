@@ -1,14 +1,14 @@
 # CukeCommander
 
-<a href="https://travis-ci.org/grange-insurance/cuke_commander"><img src="https://travis-ci.org/grange-insurance/cuke_commander.svg" /></a>
-
-<a href='https://coveralls.io/r/grange-insurance/cuke_commander?branch=master'><img src='https://coveralls.io/repos/grange-insurance/cuke_commander/badge.svg?branch=master' alt='Coverage Status' /></a>
+<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" /></a>
 
 <a href='https://gemnasium.com/grange-insurance/cuke_commander'><img src="https://gemnasium.com/grange-insurance/cuke_commander.svg" alt="Dependency Status" /></a>
 
 <a href='https://github.com/grange-insurance/cuke_commander/blob/master/LICENSE.txt'><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Project License" /></a>
 
-<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" /></a>
+<a href="https://travis-ci.org/grange-insurance/cuke_commander"><img src="https://travis-ci.org/grange-insurance/cuke_commander.svg" /></a>
+
+<a href='https://coveralls.io/r/grange-insurance/cuke_commander?branch=master'><img src='https://coveralls.io/repos/grange-insurance/cuke_commander/badge.svg?branch=master' alt='Coverage Status' /></a>
 
 <a href="https://codeclimate.com/github/grange-insurance/cuke_commander"><img src="https://codeclimate.com/github/grange-insurance/cuke_commander/badges/gpa.svg" /></a>
 
