@@ -1,6 +1,11 @@
 # CukeCommander
 
-<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" height="18"></a>
+<a href="https://travis-ci.org/grange-insurance/cuke_commander"><img src="https://travis-ci.org/grange-insurance/cuke_commander.svg" /></a>
+
+
+<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" /></a>
+
+<a href="https://codeclimate.com/github/grange-insurance/cuke_commander"><img src="https://codeclimate.com/github/grange-insurance/cuke_commander/badges/gpa.svg" /></a>
 
 The cuke_commander gem provides an easy and programmatic way to build a command line for running Cucumber.
 
