@@ -2,6 +2,7 @@ module CukeCommander
 
   # The object responsible for generating Cucumber command lines.
   class CLGenerator
+
     # Generates a Cucumber command line.
     #
     # Most option values are either an Array or a boolean value. In the case of the former, a
@@ -18,21 +19,22 @@ module CukeCommander
       [:profiles, :names, :tags, :excludes, :requires].each do |option|
         append_options(command_line, wrap_options(options[option]), flag_for(option, options[:long_flags])) if options[option]
       end
-      append_options(command_line, wrap_options(options[:file_paths])) if options[:file_paths]
-      append_option(command_line, flag_for(:no_source, options[:long_flags]))  if options[:no_source]
+
+      [:no_color, :color, :backtrace, :dry_run, :no_profile, :guess, :wip, :quiet, :verbose, :version, :help, :expand, :strict].each do |option|
+        append_option(command_line, flag_for(option, options[:long_flags])) if options[option]
+      end
 
       if options[:formatters]
         options[:formatters].each do |format, output_location|
           append_option(command_line, format, flag_for(:format, options[:long_flags]))
-          append_option(command_line, output_location,flag_for(:output, options[:long_flags])) unless output_location.to_s.empty?
+          append_option(command_line, output_location, flag_for(:output, options[:long_flags])) unless output_location.to_s.empty?
         end
       end
 
-      [:no_color, :color, :backtrace, :dry_run, :no_profile, :guess, :wip, :quiet, :verbose, :version, :help, :expand, :strict].each do |option|
-        append_option(command_line, flag_for(option,options[:long_flags])) if options[option]
-      end
+      append_options(command_line, wrap_options(options[:file_paths]))        if options[:file_paths]
+      append_option(command_line, flag_for(:no_source, options[:long_flags])) if options[:no_source]
+      append_options(command_line, wrap_options(options[:options]))           if options[:options]
 
-      append_options(command_line, wrap_options(options[:options]))                                              if options[:options]
 
       command_line
     end
