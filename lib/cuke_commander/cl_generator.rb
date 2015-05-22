@@ -11,17 +11,12 @@ module CukeCommander
     # second part.
     #
     # @param options [Hash] the Cucumber options that the command line should include.
-    STRING_ARRAY_VALIDS = %w(profiles tags file_paths excludes names requires options)
-    HASH_VALIDS = %w(formatters)
-    BOOLEAN_VALIDS = %w(no_source no_color color backtrace wip no_profile expand
-                        strict verbose version quiet guess help dry_run long_flags)
-
     def generate_command_line(options = {})
       validate_options(options)
       command_line = 'cucumber'
 
-      %w(profiles names tags excludes requires).each do |option|
-        append_options(command_line, wrap_options(options[option.to_sym]), flag_for(option.to_sym, options[:long_flags])) if options[option.to_sym]
+      [:profiles, :names, :tags, :excludes, :requires].each do |option|
+        append_options(command_line, wrap_options(options[option]), flag_for(option, options[:long_flags])) if options[option]
       end
       append_options(command_line, wrap_options(options[:file_paths])) if options[:file_paths]
       append_option(command_line, flag_for(:no_source, options[:long_flags]))  if options[:no_source]
@@ -33,14 +28,15 @@ module CukeCommander
         end
       end
 
-      %w(no_color color backtrace dry_run no_profile guess wip quiet verbose version help expand strict).each do |option|
-        append_option(command_line, flag_for(option.to_sym,options[:long_flags])) if options[option.to_sym]
+      [:no_color, :color, :backtrace, :dry_run, :no_profile, :guess, :wip, :quiet, :verbose, :version, :help, :expand, :strict].each do |option|
+        append_option(command_line, flag_for(option,options[:long_flags])) if options[option]
       end
 
       append_options(command_line, wrap_options(options[:options]))                                              if options[:options]
 
       command_line
     end
+
 
     private
 
@@ -96,16 +92,17 @@ module CukeCommander
       raise(ArgumentError, "#{option} option must be #{valid_types}, got: #{value_used.class}")
     end
 
-    STRING_ARRAY_VALIDS.each do |check_this|
-      define_method("valid_#{check_this}?".to_sym) { |check_this| valid_string_array_value?(check_this) }
+    %w(profiles tags file_paths excludes names requires options).each do |option|
+      define_method("valid_#{option}?") { |check_this| valid_string_array_value?(check_this) }
     end
 
-    HASH_VALIDS.each do |check_this|
-      define_method("valid_#{check_this}?".to_sym) { |check_this| valid_hash_value?(check_this) }
+    %w(no_source no_color color backtrace wip no_profile expand
+       strict verbose version quiet guess help dry_run long_flags).each do |option|
+      define_method("valid_#{option}?") { |check_this| valid_boolean_value?(check_this) }
     end
 
-    BOOLEAN_VALIDS.each do |check_this|
-      define_method("valid_#{check_this}?".to_sym) { |check_this| valid_boolean_value?(check_this) }
+    def valid_formatters?(formatters)
+      valid_hash_value?(formatters)
     end
 
     def valid_string_array_value?(value)
