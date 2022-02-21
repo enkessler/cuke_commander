@@ -12,7 +12,7 @@ end
 
 puts "RUBY_PLATFORM: #{RUBY_PLATFORM}"
 puts "RbConfig::CONFIG['host_os']: #{RbConfig::CONFIG['host_os']}"
-if (RUBY_PLATFORM == 'java') && (RbConfig::CONFIG['host_os'] =~ /mingw32/)
+if (RUBY_PLATFORM == 'java') && (RbConfig::CONFIG['host_os'] =~ /mingw32|mswin32/)
   # Some versions of Cucumber rely on a JRuby gem that is sometimes not included by default (jruby-win32ole). I'm
   # just going to sidestep the whole issue by using a version of Cucumber that 'just works'.
   gem 'cucumber', '2.2.0'
