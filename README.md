@@ -1,16 +1,20 @@
+Basic stuff:
+[![Gem Version](https://badge.fury.io/rb/cuke_commander.svg)](https://rubygems.org/gems/cuke_commander)
+[![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+[![Downloads](https://img.shields.io/gem/dt/cuke_commander.svg)](https://rubygems.org/gems/cuke_commander)
+
+User stuff:
+[![Yard Docs](http://img.shields.io/badge/Documentation-API-blue.svg)](https://www.rubydoc.info/gems/cuke_commander)
+
+Developer stuff:
+[![Build Status](https://github.com/enkessler/cuke_commander/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/enkessler/cuke_commander/actions/workflows/ci.yml?query=branch%3Amaster)
+[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_commander/badge.svg?branch=master)](https://coveralls.io/github/enkessler/cuke_commander?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/fd2e7728ef547bf02e9e/maintainability)](https://codeclimate.com/github/enkessler/cuke_commander/maintainability)
+
+---
+
+
 # CukeCommander
-
-<a href="http://badge.fury.io/rb/cuke_commander"><img src="https://badge.fury.io/rb/cuke_commander.svg" alt="Gem Version" /></a>
-
-<a href='https://gemnasium.com/grange-insurance/cuke_commander'><img src="https://gemnasium.com/grange-insurance/cuke_commander.svg" alt="Dependency Status" /></a>
-
-<a href='https://github.com/grange-insurance/cuke_commander/blob/master/LICENSE.txt'><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Project License" /></a>
-
-<a href="https://travis-ci.org/grange-insurance/cuke_commander"><img src="https://travis-ci.org/grange-insurance/cuke_commander.svg" /></a>
-
-<a href='https://coveralls.io/r/grange-insurance/cuke_commander?branch=master'><img src='https://coveralls.io/repos/grange-insurance/cuke_commander/badge.svg?branch=master' alt='Coverage Status' /></a>
-
-<a href="https://codeclimate.com/github/grange-insurance/cuke_commander"><img src="https://codeclimate.com/github/grange-insurance/cuke_commander/badges/gpa.svg" /></a>
 
 The cuke_commander gem provides an easy and programmatic way to build a command line for running Cucumber.
 
@@ -53,10 +57,10 @@ Simple!
 
 (see documentation for all implemented Cucumber options)
 
-## Contributing
+## Development and Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/cuke_commander/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+See [CONTRIBUTING.md](https://github.com/enkessler/cuke_commander/blob/master/CONTRIBUTING.md)
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
