@@ -1,7 +1,7 @@
-require 'spec_helper'
+require_relative '../../../environments/rspec_env'
 
 
-describe 'CukeCommander, Unit' do
+RSpec.describe 'CukeCommander, Unit' do
 
   let(:nodule) { CukeCommander }
 

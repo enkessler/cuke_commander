@@ -1,7 +1,7 @@
-require 'spec_helper'
+require_relative '../../../environments/rspec_env'
 
 
-describe 'CLGenerator, Unit' do
+RSpec.describe 'CLGenerator, Unit' do
 
   let(:clazz) { CukeCommander::CLGenerator }
   let(:generator) { clazz.new }
