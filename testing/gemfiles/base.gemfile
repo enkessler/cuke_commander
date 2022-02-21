@@ -7,3 +7,10 @@ if RUBY_VERSION =~ /^2\.[012]/
   # around. This version should 'just work'.
   gem 'cucumber', '2.2.0'
 end
+
+# A stealth dependency on some versions of Cucumber
+if ChildProcess.jruby? && ChildProcess.windows?
+  # Some versions of Cucumber rely on a JRuby gem that is sometimes not included by default (jruby-win32ole). I'm
+  # just going to sidestep the whole issue by using a version of Cucumber that 'just works'.
+  gem 'cucumber', '2.2.0'
+end
