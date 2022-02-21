@@ -16,18 +16,30 @@ module CukeCommander
       validate_options(options)
       command_line = 'cucumber'
 
-      [:profiles, :names, :tags, :excludes, :requires].each do |option|
-        append_options(command_line, wrap_options(options[option]), flag_for(option, options[:long_flags])) if options[option]
+      %i[profiles names tags excludes requires].each do |option|
+        next unless options[option]
+
+        append_options(command_line,
+                       wrap_options(options[option]),
+                       flag_for(option, options[:long_flags]))
       end
 
-      [:no_color, :color, :backtrace, :dry_run, :no_profile, :guess, :wip, :quiet, :verbose, :version, :help, :expand, :strict].each do |option|
+      %i[no_color color backtrace dry_run no_profile guess
+         wip quiet verbose version help expand strict].each do |option|
         append_option(command_line, flag_for(option, options[:long_flags])) if options[option]
       end
 
       if options[:formatters]
         options[:formatters].each do |format, output_location|
-          append_option(command_line, format, flag_for(:format, options[:long_flags]))
-          append_option(command_line, output_location, flag_for(:output, options[:long_flags])) unless output_location.to_s.empty?
+          append_option(command_line,
+                        format,
+                        flag_for(:format, options[:long_flags]))
+
+          next if output_location.to_s.empty?
+
+          append_option(command_line,
+                        output_location,
+                        flag_for(:output, options[:long_flags]))
         end
       end
 
@@ -50,6 +62,7 @@ module CukeCommander
         raise(ArgumentError, "Option: #{option}, is not a cucumber option") unless CUKE_OPTIONS.include?(option.to_s)
       end
 
+      # rubocop:disable Metrics/LineLength
       raise_invalid_error('Profiles', 'a String or Array', options[:profiles])           unless valid_profiles?(options[:profiles])
       raise_invalid_error('Tags', 'a String or Array', options[:tags])                   unless valid_tags?(options[:tags])
       raise_invalid_error('File path', 'a String or Array', options[:file_paths])        unless valid_file_paths?(options[:file_paths])
@@ -73,15 +86,16 @@ module CukeCommander
       raise_invalid_error('Requires', 'a String or Array', options[:requires])           unless valid_requires?(options[:requires])
       raise_invalid_error('Options', 'a String or Array', options[:options])             unless valid_options?(options[:options])
       raise_invalid_error('Long Flags', 'true or false', options[:long_flags])           unless valid_long_flags?(options[:long_flags])
+      # rubocop:enable Metrics/LineLength
     end
 
-    def append_options(command, option_set, flag= nil)
+    def append_options(command, option_set, flag = nil)
       option_set.each do |option|
         append_option(command, option, flag)
       end
     end
 
-    def append_option(command, option, flag= nil)
+    def append_option(command, option, flag = nil)
       command << " #{flag}" if flag
       command << " #{option}"
     end
@@ -94,12 +108,12 @@ module CukeCommander
       raise(ArgumentError, "#{option} option must be #{valid_types}, got: #{value_used.class}")
     end
 
-    %w(profiles tags file_paths excludes names requires options).each do |option|
+    %w[profiles tags file_paths excludes names requires options].each do |option|
       define_method("valid_#{option}?") { |check_this| valid_string_array_value?(check_this) }
     end
 
-    %w(no_source no_color color backtrace wip no_profile expand
-       strict verbose version quiet guess help dry_run long_flags).each do |option|
+    %w[no_source no_color color backtrace wip no_profile expand
+       strict verbose version quiet guess help dry_run long_flags].each do |option|
       define_method("valid_#{option}?") { |check_this| valid_boolean_value?(check_this) }
     end
 

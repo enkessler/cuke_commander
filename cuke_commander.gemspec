@@ -1,17 +1,16 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'cuke_commander/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "cuke_commander"
+  spec.name          = 'cuke_commander'
   spec.version       = CukeCommander::VERSION
-  spec.authors       = ["Eric Kessler", 'Donavan Stanley']
-  spec.email         = ["morrow748@gmail.com"]
-  spec.summary       = %q{Command Cucumber}
-  spec.description   = %q{Provides an easy way to build a cucumber commandline.}
-  spec.homepage      = "https://github.com/enkessler/cuke_commander"
-  spec.license       = "MIT"
+  spec.authors       = ['Eric Kessler', 'Donavan Stanley']
+  spec.email         = ['morrow748@gmail.com']
+  spec.summary       = 'Command Cucumber'
+  spec.description   = 'Provides an easy way to build a cucumber commandline.'
+  spec.homepage      = 'https://github.com/enkessler/cuke_commander'
+  spec.license       = 'MIT'
   spec.metadata      = {
     'bug_tracker_uri'   => 'https://github.com/enkessler/cuke_commander/issues',
     'changelog_uri'     => 'https://github.com/enkessler/cuke_commander/blob/master/CHANGELOG.md',
@@ -28,7 +27,7 @@ Gem::Specification.new do |spec|
     source_controlled_files + ['README.md', 'LICENSE.txt', 'CHANGELOG.md', 'cuke_commander.gemspec']
   end
 
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
   spec.required_ruby_version = '>= 2.0', '< 4.0'
 
