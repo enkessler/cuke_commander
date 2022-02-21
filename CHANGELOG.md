@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Removed
+- Dropped support for Ruby 1.x. Currently supported Ruby versions are 2.x and 3.x.
 
 
 ## [1.1.0] - 2015-05-05
