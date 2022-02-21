@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rainbow', '< 4.0.0'
   spec.add_development_dependency "rake"
   spec.add_development_dependency 'cucumber'
+  spec.add_development_dependency 'rubocop', '<= 0.50.0' # RuboCop can not lint against Ruby 2.0 after this version
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'simplecov', '< 1.0.0'
   spec.add_development_dependency 'simplecov-lcov', '< 1.0'

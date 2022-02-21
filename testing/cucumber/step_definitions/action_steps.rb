@@ -53,9 +53,9 @@ When(/I ask for a cucumber command line with the following additional options$/)
 end
 
 And(/^I ask for the command line with "([^"]*)" flags$/) do |short_long|
-  if short_long == 'long'
-    @command_line = @commander.generate_command_line(@options.merge({:long_flags => true}))
-  else
-    @command_line = @commander.generate_command_line(@options.merge({:long_flags => false}))
-  end
+  @command_line = if short_long == 'long'
+                    @commander.generate_command_line(@options.merge({ :long_flags => true }))
+                  else
+                    @commander.generate_command_line(@options.merge({ :long_flags => false }))
+                  end
 end
