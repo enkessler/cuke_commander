@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec :path => "../../"
 
-require 'childprocess'
+require 'rbconfig'
 
 if RUBY_VERSION =~ /^2\.[012]/
   # Older Rubies are limited to older Cucumbers, which have bugs that aren't worth working
@@ -10,8 +10,7 @@ if RUBY_VERSION =~ /^2\.[012]/
   gem 'cucumber', '2.2.0'
 end
 
-# A stealth dependency on some versions of Cucumber
-if ChildProcess.jruby? && ChildProcess.windows?
+if (RUBY_PLATFORM == 'java') && (RbConfig::CONFIG['host_os'] =~ /mingw32/)
   # Some versions of Cucumber rely on a JRuby gem that is sometimes not included by default (jruby-win32ole). I'm
   # just going to sidestep the whole issue by using a version of Cucumber that 'just works'.
   gem 'cucumber', '2.2.0'
