@@ -1,3 +1,9 @@
 source 'https://rubygems.org'
 
 gemspec :path => "../../"
+
+if RUBY_VERSION =~ /^2\.[012]/
+  # Older Rubies are limited to older Cucumbers, which have bugs that aren't worth working
+  # around. This version should 'just work'.
+  gem 'cucumber', '2.2.0'
+end
