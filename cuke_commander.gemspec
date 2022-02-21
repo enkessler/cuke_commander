@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'simplecov', '< 1.0.0'
   spec.add_development_dependency 'simplecov-lcov', '< 1.0'
+  spec.add_development_dependency 'yard', '< 1.0'
 end
