@@ -1,7 +1,7 @@
 module CukeCommander
 
   # The object responsible for generating Cucumber command lines.
-  class CLGenerator
+  class CLGenerator # rubocop:disable Metrics/ClassLength # It's mostly just a couple of large hashes
 
     # Generates a Cucumber command line.
     #
@@ -12,41 +12,37 @@ module CukeCommander
     # second part.
     #
     # @param options [Hash] the Cucumber options that the command line should include.
-    def generate_command_line(options = {})
+    def generate_command_line(options = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/LineLength # It's as good as it's going to get right now
       validate_options(options)
       command_line = 'cucumber'
 
-      %i[profiles names tags excludes requires].each do |option|
-        next unless options[option]
+      options.each_pair do |option, values|
+        next if (values == false) || # Don't append options that are explicitly rejected
+                (option == :formatters) || # Formatters can have flag pairs, so they're handled separately
+                (option == :long_flags) # Not actually an option, just a modifier for the rest of the options
+
+        # Flag only options come in with a true value but don't have a value that needs to be added to the command line
+        values = nil if values == true
 
         append_options(command_line,
-                       wrap_options(options[option]),
-                       flag_for(option, options[:long_flags]))
-      end
-
-      %i[no_color color backtrace dry_run no_profile guess
-         wip quiet verbose version help expand strict].each do |option|
-        append_option(command_line, flag_for(option, options[:long_flags])) if options[option]
+                       values: wrap_values(values),
+                       flag:   flag_for(option, options[:long_flags]))
       end
 
       if options[:formatters]
         options[:formatters].each do |format, output_location|
           append_option(command_line,
-                        format,
-                        flag_for(:format, options[:long_flags]))
+                        value: format,
+                        flag:  flag_for(:format, options[:long_flags]))
 
+          # Not all formatters come will also have an associated output redirection
           next if output_location.to_s.empty?
 
           append_option(command_line,
-                        output_location,
-                        flag_for(:output, options[:long_flags]))
+                        value: output_location,
+                        flag:  flag_for(:output, options[:long_flags]))
         end
       end
-
-      append_options(command_line, wrap_options(options[:file_paths]))        if options[:file_paths]
-      append_option(command_line, flag_for(:no_source, options[:long_flags])) if options[:no_source]
-      append_options(command_line, wrap_options(options[:options]))           if options[:options]
-
 
       command_line
     end
@@ -58,50 +54,56 @@ module CukeCommander
     def validate_options(options)
       raise(ArgumentError, "Argument must be a Hash, got: #{options.class}") unless options.is_a?(Hash)
 
-      options.each_key do |option|
+      options.each_pair do |option, value|
         raise(ArgumentError, "Option: #{option}, is not a cucumber option") unless CUKE_OPTIONS.include?(option.to_s)
-      end
 
-      # rubocop:disable Metrics/LineLength
-      raise_invalid_error('Profiles', 'a String or Array', options[:profiles])           unless valid_profiles?(options[:profiles])
-      raise_invalid_error('Tags', 'a String or Array', options[:tags])                   unless valid_tags?(options[:tags])
-      raise_invalid_error('File path', 'a String or Array', options[:file_paths])        unless valid_file_paths?(options[:file_paths])
-      raise_invalid_error('Formatters', 'a Hash', options[:formatters])                  unless valid_formatters?(options[:formatters])
-      raise_invalid_error('Excludes', 'a String or Array', options[:excludes])           unless valid_excludes?(options[:excludes])
-      raise_invalid_error('No-source', 'true or false', options[:no_source])             unless valid_no_source?(options[:no_source])
-      raise_invalid_error('No-color', 'true or false', options[:no_color])               unless valid_no_color?(options[:no_color])
-      raise_invalid_error('Color', 'true or false', options[:color])                     unless valid_color?(options[:color])
-      raise_invalid_error('Backtrace', 'true or false', options[:backtrace])             unless valid_backtrace?(options[:backtrace])
-      raise_invalid_error('Expand', 'true or false', options[:expand])                   unless valid_expand?(options[:expand])
-      raise_invalid_error('Guess', 'true or false', options[:guess])                     unless valid_guess?(options[:guess])
-      raise_invalid_error('Help', 'true or false', options[:help])                       unless valid_help?(options[:help])
-      raise_invalid_error('Dry run', 'true or false', options[:dry_run])                 unless valid_dry_run?(options[:dry_run])
-      raise_invalid_error('No profile', 'true or false', options[:no_profile])           unless valid_no_profile?(options[:no_profile])
-      raise_invalid_error('Quiet', 'true or false', options[:quiet])                     unless valid_quiet?(options[:quiet])
-      raise_invalid_error('Strict', 'true or false', options[:strict])                   unless valid_strict?(options[:strict])
-      raise_invalid_error('Verbose', 'true or false', options[:verbose])                 unless valid_verbose?(options[:verbose])
-      raise_invalid_error('Version', 'true or false', options[:version])                 unless valid_version?(options[:version])
-      raise_invalid_error('Wip', 'true or false', options[:wip])                         unless valid_wip?(options[:wip])
-      raise_invalid_error('Names', 'a String or Array', options[:names])                 unless valid_names?(options[:names])
-      raise_invalid_error('Requires', 'a String or Array', options[:requires])           unless valid_requires?(options[:requires])
-      raise_invalid_error('Options', 'a String or Array', options[:options])             unless valid_options?(options[:options])
-      raise_invalid_error('Long Flags', 'true or false', options[:long_flags])           unless valid_long_flags?(options[:long_flags])
-      # rubocop:enable Metrics/LineLength
-    end
-
-    def append_options(command, option_set, flag = nil)
-      option_set.each do |option|
-        append_option(command, option, flag)
+        validate_option(option, value)
       end
     end
 
-    def append_option(command, option, flag = nil)
+    def validate_option(option_name, value) # rubocop:disable Metrics/MethodLength # It's just a big hash
+      error_info = { profiles:   ['Profiles', 'a String or Array'],
+                     tags:       ['Tags', 'a String or Array'],
+                     file_paths: ['File path', 'a String or Array'],
+                     formatters: ['Formatters', 'a Hash'],
+                     excludes:   ['Excludes', 'a String or Array'],
+                     no_source:  ['No-source', 'true or false'],
+                     no_color:   ['No-color', 'true or false'],
+                     color:      ['Color', 'true or false'],
+                     backtrace:  ['Backtrace', 'true or false'],
+                     expand:     ['Expand', 'true or false'],
+                     guess:      ['Guess', 'true or false'],
+                     help:       ['Help', 'true or false'],
+                     dry_run:    ['Dry run', 'true or false'],
+                     no_profile: ['No profile', 'true or false'],
+                     quiet:      ['Quiet', 'true or false'],
+                     strict:     ['Strict', 'true or false'],
+                     verbose:    ['Verbose', 'true or false'],
+                     version:    ['Version', 'true or false'],
+                     wip:        ['Wip', 'true or false'],
+                     names:      ['Names', 'a String or Array'],
+                     requires:   ['Requires', 'a String or Array'],
+                     options:    ['Options', 'a String or Array'],
+                     long_flags: ['Long Flags', 'true or false'] }
+
+      return if send("valid_#{option_name}?", value)
+
+      raise_invalid_error(error_info[option_name].first, error_info[option_name].last, value)
+    end
+
+    def append_options(command, values: nil, flag: nil)
+      values.each do |value|
+        append_option(command, flag: flag, value: value)
+      end
+    end
+
+    def append_option(command, flag: nil, value: nil)
       command << " #{flag}" if flag
-      command << " #{option}"
+      command << " #{value}" if value
     end
 
-    def wrap_options(option_set)
-      option_set.is_a?(Array) ? option_set : [option_set]
+    def wrap_values(value_set)
+      value_set.is_a?(Array) ? value_set : [value_set]
     end
 
     def raise_invalid_error(option, valid_types, value_used)
@@ -133,50 +135,35 @@ module CukeCommander
       value.nil? || value.is_a?(Hash)
     end
 
-    def flag_for(option, long_flags)
-      case option
-        when :tags
-          long_flags ? '--tags' : '-t'
-        when :profiles
-          long_flags ? '--profile' : '-p'
-        when :names
-          long_flags ? '--name' : '-n'
-        when :excludes
-          long_flags ? '--exclude' : '-e'
-        when :requires
-          long_flags ? '--require' : '-r'
-        when :backtrace
-          long_flags ? '--backtrace' : '-b'
-        when :color
-          long_flags ? '--color' : '-c'
-        when :no_color
-          '--no-color'
-        when :dry_run
-          long_flags ? '--dry-run' : '-d'
-        when :guess
-          long_flags ? '--guess' : '-g'
-        when :wip
-          long_flags ? '--wip' : '-w'
-        when :quiet
-          long_flags ? '--quiet' : '-q'
-        when :help
-          long_flags ? '--help' : '-h'
-        when :verbose
-          long_flags ? '--verbose' : '-v'
-        when :version
-          '--version'
-        when :strict
-          long_flags ? '--strict' : '-S'
-        when :expand
-          long_flags ? '--expand' : '-x'
-        when :no_source
-          long_flags ? '--no-source' : '-s'
-        when :no_profile
-          long_flags ? '--no-profile' : '-P'
-        when :format
-          long_flags ? '--format' : '-f'
-        when :output
-          long_flags ? '--out' : '-o'
+    def flag_for(option, long_flags) # rubocop:disable Metrics/MethodLength # It's just a big hash
+      flags = { tags:       ['--tags', '-t'],
+                profiles:   ['--profile', '-p'],
+                names:      ['--name', '-n'],
+                excludes:   ['--exclude', '-e'],
+                requires:   ['--require', '-r'],
+                backtrace:  ['--backtrace', '-b'],
+                color:      ['--color', '-c'],
+                no_color:   ['--no-color', '--no-color'],
+                dry_run:    ['--dry-run', '-d'],
+                guess:      ['--guess', '-g'],
+                wip:        ['--wip', '-w'],
+                quiet:      ['--quiet', '-q'],
+                help:       ['--help', '-h'],
+                verbose:    ['--verbose', '-v'],
+                version:    ['--version', '--version'],
+                strict:     ['--strict', '-S'],
+                expand:     ['--expand', '-x'],
+                no_source:  ['--no-source', '-s'],
+                no_profile: ['--no-profile', '-P'],
+                format:     ['--format', '-f'],
+                output:     ['--out', '-o'],
+                file_paths: [nil, nil], # File paths are appended 'as is', so there is no flag used
+                options: [nil, nil] } # Extra options are appended 'as is', so there is no flag used
+
+      if long_flags
+        flags[option].first
+      else
+        flags[option].last
       end
     end
 
